@@ -106,12 +106,11 @@ class Board:
         return self.board[row][col]
 
     def get_valid_moves(self, piece):
-        moves = {}
-        if piece.type == "rook" or piece.type == "bishop" or piece.type == "queen":
-            moves = self.get_valid_moves_cont(piece)
-
+        moves = []
+        if piece.type == "pawn":
+            moves = self.get_valid_moves_pawn(piece)
         else:
-            pass
+            moves = self.get_valid_moves_cont(piece)
         return moves
 
     def get_valid_moves_cont(self, piece):
@@ -123,22 +122,73 @@ class Board:
                 if self.board[row][col]:
                     board_status[(row, col)] = self.board[row][col].color
 
-        valid_moves = {}
+        valid_moves = []
         for move in MOVES[piece.type]:
-            for i in range(1, 9):
-                current_pos = (i*move[0] + piece.row,
-                               i*move[1] + piece.col)
+            if piece.type == 'king' or piece.type == 'horse':
+                current_pos = (move[0]+piece.row, move[1]+piece.col)
                 if (current_pos[0] < 0 or current_pos[0] > 7 or current_pos[1] < 0 or current_pos[1] > 7):
                     continue
 
                 board_piece = board_status.get(current_pos, False)
                 if (not board_piece):
-                    valid_moves[current_pos] = []
+                    valid_moves.append(current_pos)
                     continue
 
                 else:
                     if (board_piece != piece.color):
-                        valid_moves[current_pos] = []
-                    break
+                        valid_moves.append(current_pos)
+
+            else:
+                for i in range(1, 9):
+                    current_pos = (i*move[0] + piece.row,
+                                   i*move[1] + piece.col)
+                    if (current_pos[0] < 0 or current_pos[0] > 7 or current_pos[1] < 0 or current_pos[1] > 7):
+                        continue
+
+                    board_piece = board_status.get(current_pos, False)
+                    if (not board_piece):
+                        valid_moves.append(current_pos)
+                        continue
+
+                    else:
+                        if (board_piece != piece.color):
+                            valid_moves.append(current_pos)
+                        break
 
         return valid_moves
+
+    def get_valid_moves_pawn(self, piece):
+        moves = []
+        board_status = {}
+        for row in range(ROWS):
+            for col in range(COLS):
+                if self.board[row][col]:
+                    board_status[(row, col)] = self.board[row][col].color
+
+        if piece.color == BLACK:
+            direction = 1
+            forward = (piece.row+direction, piece.col)
+            if (not board_status.get(forward, False)):
+                if piece.row == 1:
+                    moves.append((piece.row + 2*direction, piece.col))
+
+        else:
+            direction = -1
+            forward = (piece.row+direction, piece.col)
+            if (not board_status.get(forward, False)):
+                if piece.row == 6:
+                    moves.append((piece.row + 2*direction, piece.col))
+
+        diagonals = [(piece.row+direction, piece.col-1),
+                     (piece.row+direction, piece.col+1)]
+        board_piece = board_status.get(forward, False)
+        if (not board_piece):
+            moves.append(forward)
+        for d in diagonals:
+            board_piece = board_status.get(d, False)
+            if (board_piece and board_piece != piece.color):
+                moves.append(d)
+        return moves
+
+    def remove(self, row, col):
+        self.board[row][col] == 0

@@ -23,8 +23,8 @@ def get_pos(pos):
 def main():
 
     game = Game(WIN)
-    p = game.board.get_piece(7, 3)
-    game.board.move(p, 4, 4)
+    p = game.board.get_piece(6, 1)
+    game.board.move(p, 2, 4)
     game.update()
     # print(game.board.board)
     run = True
@@ -42,7 +42,7 @@ def main():
 
                 game.select(row, col)
 
-            game.update()
+        game.update()
     pygame.quit()
 
 

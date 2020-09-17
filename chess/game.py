@@ -8,7 +8,7 @@ class Game:
         self.win = win
         self.board = Board(self.win)
         self.turn = WHITE
-        self.valid_moves = {}
+        self.valid_moves = []
         self.selected = None
 
     def update(self):
@@ -17,7 +17,8 @@ class Game:
         pygame.display.update()
 
     def select(self, row, col):
-
+        # if self.selected:
+        #     result= se
         piece = self.board.get_piece(row, col)
         if piece != 0 and piece.color == self.turn:
             self.selected = piece
@@ -27,7 +28,7 @@ class Game:
         return False
 
     def change_turn(self):
-        self.valid_moves = {}
+        self.valid_moves = []
         if self.turn == WHITE:
             self.turn = BLACK
         else:
