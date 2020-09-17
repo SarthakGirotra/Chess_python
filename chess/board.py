@@ -10,6 +10,7 @@ class Board:
         self.board = []
         self.create_board()
         self.draw_board()
+        self.history = []
 
     def draw_squares(self, win):
         win.fill(BROWN)
@@ -96,6 +97,7 @@ class Board:
         pygame.display.update()
 
     def move(self, piece, row, col):
+
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         if piece.type == "pawn":
             if row == ROWS-1 or row == 0:
@@ -190,5 +192,17 @@ class Board:
                 moves.append(d)
         return moves
 
+    def check_Check(self):
+        pass
+
+    def valid_moves_check(self, moves):
+        pass
+
+    def checkmate(self, moves):
+        pass
+
     def remove(self, row, col):
-        self.board[row][col] == 0
+        p = self.get_piece(row, col)
+        print(p.color, p, "taken")
+        self.history.append(p)
+        self.board[row][col] = 0

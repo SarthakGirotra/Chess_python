@@ -23,10 +23,8 @@ def get_pos(pos):
 def main():
 
     game = Game(WIN)
-    p = game.board.get_piece(6, 1)
-    game.board.move(p, 2, 4)
     game.update()
-    # print(game.board.board)
+
     run = True
     clock = pygame.time.Clock()
 

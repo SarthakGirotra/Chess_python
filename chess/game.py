@@ -17,8 +17,12 @@ class Game:
         pygame.display.update()
 
     def select(self, row, col):
-        # if self.selected:
-        #     result= se
+        if self.selected:
+            result = self._move(row, col)
+            if not result:
+                self.selected = None
+                self.select(row, col)
+
         piece = self.board.get_piece(row, col)
         if piece != 0 and piece.color == self.turn:
             self.selected = piece
@@ -26,6 +30,18 @@ class Game:
             return True
 
         return False
+
+    def _move(self, row, col):
+        piece = self.board.get_piece(row, col)
+        if self.selected and (row, col) in self.valid_moves:
+            if piece != 0:
+                self.board.remove(row, col)
+            self.board.move(self.selected, row, col)
+            self.change_turn()
+
+        else:
+            return False
+        return True
 
     def change_turn(self):
         self.valid_moves = []

@@ -1,8 +1,9 @@
 import pygame
-from .constants import SQUARE_SIZE
+from .constants import SQUARE_SIZE, WHITE, BLACK
 
 
 class Piece:
+
     def __init__(self, row, col, color, type):
         self.row = row
         self.col = col
@@ -20,6 +21,7 @@ class Piece:
         self.y = SQUARE_SIZE*(self.row+0.2)
 
     def move(self, row, col):
+
         self.row = row
         self.col = col
         self.calc_pos()
