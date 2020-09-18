@@ -333,19 +333,53 @@ class Board:
 
     def check_protection(self, piece):
         moves = self.get_valid_moves(piece)
+        loc = []
+        king_moves = []
         if piece.type == 'king':
-            king_moves = []
+
             for move in moves:
                 P = self.get_piece(move[0], move[1])
                 if P:
                     if not self.cover((piece.row, piece.col), P):
-                        king_moves.append(move)
+                        loc.append(move)
                     else:
                         continue
 
                 else:
+                    loc.append(move)
+
+            for move in loc:
+                if self.undo(piece, move):
                     king_moves.append(move)
 
             return king_moves
 
-        return moves
+        else:
+            for move in moves:
+                if self.undo(piece, move):
+                    loc.append(move)
+
+        return loc
+
+    def undo(self, piece, move):
+        row_i = piece.row
+        col_i = piece.col
+        color_i = piece.color
+        type_i = piece.type
+        hist = 0
+        can_move = True
+        if self.get_piece(move[0], move[1]):
+            hist = 1
+            hist_type = self.get_piece(move[0], move[1]).type
+            hist_color = self.get_piece(move[0], move[1]).color
+        self.move(piece, move[0], move[1])
+        king, P = self.check_Check()
+
+        if king and self.get_piece(king[0], king[1]).color == piece.color:
+            can_move = False
+        self.move(piece, row_i, col_i)
+        if hist:
+            self.board[move[0]][move[1]] = Piece(
+                move[0], move[1], hist_color, hist_type)
+
+        return can_move
