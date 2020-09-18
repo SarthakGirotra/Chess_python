@@ -32,6 +32,10 @@ class Game:
             self.selected = piece
             king, P = self.board.check_Check()
             if king:
+
+                if(self.board.checkmate(king, P)):
+                    print('check')
+
                 self.valid_moves = self.board.valid_moves_check(P, king, piece)
             else:
                 self.valid_moves = self.board.check_protection(piece)
