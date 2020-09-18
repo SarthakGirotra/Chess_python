@@ -40,6 +40,9 @@ def main():
 
                 game.select(row, col)
 
+            # if event.type == pygame.KEYDOWN:
+            #     game.reset()
+
         game.update()
     pygame.quit()
 
