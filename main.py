@@ -34,11 +34,11 @@ def main():
                 row, col = get_pos(pos)
 
                 game.select(row, col)
-
+                game.update()
             # if event.type == pygame.KEYDOWN:
             #     game.reset()
 
-        game.update()
+        
     pygame.quit()
 
 
