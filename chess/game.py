@@ -34,7 +34,7 @@ class Game:
             if king:
                 self.valid_moves = self.board.valid_moves_check(P, king, piece)
             else:
-                self.valid_moves = self.board.get_valid_moves(piece)
+                self.valid_moves = self.board.check_protection(piece)
             return True
 
         return False

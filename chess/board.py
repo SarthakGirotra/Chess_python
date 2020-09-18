@@ -261,6 +261,8 @@ class Board:
         king_piece = self.get_piece(king[0], king[1])
         for move in MOVES['king']:
             current_pos = (move[0]+king[0], move[1]+king[1])
+            if current_pos[0] < 0 or current_pos[0] > 7 or current_pos[1] < 0 or current_pos[1] > 7:
+                continue
             if current_pos == (checker.row, checker.col):
                 if cover == False:
                     moves.append(current_pos)
@@ -328,3 +330,22 @@ class Board:
             winner = "BLACK"
         if not flag:
             print('checkmate', winner,  'wins')
+
+    def check_protection(self, piece):
+        moves = self.get_valid_moves(piece)
+        if piece.type == 'king':
+            king_moves = []
+            for move in moves:
+                P = self.get_piece(move[0], move[1])
+                if P:
+                    if not self.cover((piece.row, piece.col), P):
+                        king_moves.append(move)
+                    else:
+                        continue
+
+                else:
+                    king_moves.append(move)
+
+            return king_moves
+
+        return moves
