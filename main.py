@@ -6,11 +6,6 @@ from chess.piece import Piece
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption('Chess')
-# blit is x,y col,row
-# y is 75 *n.2  where n is row
-# 520 for 8th row
-# x is 75* (n-1).93
-# if x=0 row =-5
 
 
 def get_pos(pos):

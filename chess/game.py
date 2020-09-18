@@ -25,7 +25,6 @@ class Game:
             result = self._move(row, col)
             if not result:
                 self.selected = None
-                #self.select(row, col)
 
         piece = self.board.get_piece(row, col)
         if piece != 0 and piece.color == self.turn:
@@ -35,6 +34,8 @@ class Game:
 
                 if(self.board.checkmate(king, P)):
                     print('check')
+                else:
+                    self.reset()
 
                 self.valid_moves = self.board.valid_moves_check(P, king, piece)
             else:
