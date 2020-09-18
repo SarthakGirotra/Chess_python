@@ -218,11 +218,11 @@ class Board:
 
                     if P.color == WHITE:
                         if self.black_king in moves:
-
+                            self.checkmate(self.black_king, P)
                             return self.black_king, P
                     else:
                         if self.white_king in moves:
-
+                            self.checkmate(self.white_king, P)
                             return self.white_king, P
         return None, None
 
@@ -261,10 +261,11 @@ class Board:
         king_piece = self.get_piece(king[0], king[1])
         for move in MOVES['king']:
             current_pos = (move[0]+king[0], move[1]+king[1])
-            if current_pos == (checker.row, checker.col) and cover == False:
-                moves.append(current_pos)
-            else:
-                continue
+            if current_pos == (checker.row, checker.col):
+                if cover == False:
+                    moves.append(current_pos)
+                else:
+                    continue
             if(self.check_valid_move_king(current_pos, king_piece)):
                 moves.append(current_pos)
         return moves
@@ -290,14 +291,14 @@ class Board:
             for col in range(COLS):
                 P = self.get_piece(row, col)
                 if P and P.color != king_piece.color:
-                    if move in self.get_valid_moves(P):
+                    if move in self.get_valid_moves(P) and not self.cover((king_piece.row, king_piece.col), P):
                         return False
                 elif P and P.color == king_piece.color:
                     if move == (P.row, P.col):
                         return False
 
         return True
-# todo  [add check_protection while moving],[cover to diff color pieces when check]
+# todo  [add check_protection while moving]
 
     def get_valid_moves_same_color(self, piece):
         temp = piece
@@ -312,5 +313,18 @@ class Board:
             temp.color = WHITE
         return moves
 
-    def checkmate(self, king):
-        pass
+    def checkmate(self, king, checker):
+        flag = 0
+        king_piece = self.get_piece(king[0], king[1])
+        for row in range(ROWS):
+            for col in range(COLS):
+                P = self.get_piece(row, col)
+                if P and P.color == king_piece.color:
+                    if(self.valid_moves_check(checker, king, P)) != []:
+                        flag += 1
+        if king_piece.color == BLACK:
+            winner = "WHITE"
+        else:
+            winner = "BLACK"
+        if not flag:
+            print('checkmate', winner,  'wins')
